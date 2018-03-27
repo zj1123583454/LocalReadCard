@@ -1,0 +1,7 @@
+1.sudo apt-get update && sudo apt-get upgrade
+2.reboot
+3.sudo apt-get install python-opencv
+4.sudo apt-get install python-pil.imagetk
+5.git clone git://git.drogon.net/wiringPi
+6.cd /Dowload/wiringPi/
+7.sudo ./build
