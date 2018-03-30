@@ -39,16 +39,18 @@ class Gui(object):
 		self.CompareFlag=False
 		self.CardInfo=CardInfo
 		self.var=var
+		self.FacecmpFlag=FacecmpFlag
 		self.root=Tk()
 
 		self.windowsize="%dx%d"%(self.root.winfo_screenwidth(),self.root.winfo_screenheight())
 		self.root.geometry(self.windowsize)
 		self.root.title("人证核验")
 
-		IDImage=PIL.Image.open(r"./face/zp2.png")
-		self.IDImage=ImageTk.PhotoImage(IDImage)
-		VDImage=PIL.Image.open(r"./face/zp3.png")
-		self.VDImage=ImageTk.PhotoImage(VDImage)
+		self.SrcIDImage=PIL.Image.open(r"./face/zp2.png")
+		self.IDImage=ImageTk.PhotoImage(self.SrcIDImage)
+		self.SrcVDImage=PIL.Image.open(r"./face/zp3.png")
+		self.VDImage=ImageTk.PhotoImage(self.SrcVDImage)
+
 		CamImage=PIL.Image.open(r"./face/camera.png")
 		self.CamImage=ImageTk.PhotoImage(CamImage)
 
@@ -116,20 +118,35 @@ class Gui(object):
 	def Show_Text(self):
 		if not self.CardInfo.empty():
 			argdict=self.CardInfo.get_nowait()
-			self.Name.set(argdict['Name'])
-			self.Sex.set(argdict['Sex'])
-			self.Brithday.set(argdict['Bird'])
-			self.Addr.set(argdict['Address'])
-			self.Number.set(argdict['ID'])
-			if os.path.exists("./zp.bmp"):
-				img=PIL.Image.open("./zp.bmp")
-				Image=ImageTk.PhotoImage(image=img)
-				self.IDFace.imgtk=Image
-				self.IDFace.configure(image=Image)
-				self.FaceFlag=True
+			if argdict ==None:
+				self.Name.set('')
+				self.Sex.set('')
+				self.Brithday.set('')
+				self.Addr.set('')
+				self.Number.set('')
+
+				image1=ImageTk.PhotoImage(image=self.SrcIDImage)
+				self.IDFace.imgtk=image1
+				self.IDFace.configure(image=image1)
+		
+				image2=ImageTk.PhotoImage(image=self.SrcVDImage)
+				self.VidFace.imgtk=image2
+				self.VidFace.configure(image=image2)
+			else:
+				self.Name.set(argdict['Name'])
+				self.Sex.set(argdict['Sex'])
+				self.Brithday.set(argdict['Bird'])
+				self.Addr.set(argdict['Address'])
+				self.Number.set(argdict['ID'])
+				if os.path.exists("./zp.bmp"):
+					img=PIL.Image.open("./zp.bmp")
+					Image=ImageTk.PhotoImage(image=img)
+					self.IDFace.imgtk=Image
+					self.IDFace.configure(image=Image)
+					self.FaceFlag=True
 		if not self.var.empty():
 			self.Result.set(self.var.get_nowait())
-		self.IDName.after(10,self.Show_Text)
+		self.IDName.after(30,self.Show_Text)
 	
 	def Open_Camera(self): 
 		CameraNumber=CheckVideo()	
@@ -147,12 +164,12 @@ class Gui(object):
 
 		else:
 			print "Camera Not Found"
-	def Show_Video(self,):
+	def Show_Video(self):
 		success,self.frame=self.cap.read()
 		if not success:
 			print "视频流为空!"
 		self.frame=cv2.flip(self.frame,1)
-		self.frame=cv2.resize(self.frame,(240,360))
+		#self.frame=cv2.resize(self.frame,(240,360))
 		#self.image=cv2.cvtColor(self.frame,cv2.cv.CV_BGR2GRAY)
 		self.image=cv2.cvtColor(self.frame,cv2.cv.CV_RGB2BGRA)
 		#cv2.equalizeHist(self.image,self.image)
@@ -165,14 +182,14 @@ class Gui(object):
 				cv2.imwrite('./face/Image1.bmp',self.frame)
 				self.VideoImage_Show(self.image,faceRect)
 				self.FaceFlag=False
-				FacecmpFlag.put(True)
+				self.FacecmpFlag.put(True)
 			'''draw face frame'''
 			#cv2.rectangle(self.image,(x,y),(x+w,y+h),(255,00,51))
 		img=Image.fromarray(self.image)
 		imgtk=ImageTk.PhotoImage(image=img)
 		self.VideoLabel.imgtk=imgtk
 		self.VideoLabel.configure(image=imgtk)
-		self.VideoLabel.after(10,self.Show_Video)
+		self.VideoLabel.after(50,self.Show_Video)
 	
 	def VideoImage_Show(self,Frame,place):
 		cv2.rectangle(Frame,(place[0],place[1]),(place[2],place[3]),(255,00,51),2)
@@ -220,6 +237,7 @@ def EncodeData(libc,Data):
 			del Buffer
 			return ID_Info
 	except:
+		print "Decode data Error"
 		del Buffer
 		return None	
 	

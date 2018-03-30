@@ -1,5 +1,5 @@
 Object:
-	-python -O -m Project.py
+	-python -O -m main.py
 	-python -m *.py
 pack:
 	-rm PySerial.py*

@@ -109,10 +109,10 @@ class FaceCompare(object):
 			return 0
 		else:
 			return -3
-#if __name__=="__main__":
-#	value=FaceCompare()	
-#	if value.LoadConfig()==0:
-#		result=value.Face_Import("zp")
+if __name__=="__main__":
+	value=FaceCompare()	
+	if value.LoadConfig()==0:
+		result=value.Face_Import("zp")
 #		print "导入:",result
 #		if result <0:
 #			print result
@@ -120,5 +120,5 @@ class FaceCompare(object):
 #		elif result["status"] ==0:
 #			print value.Face_Compare("Image1")
 #			print value.Face_Delete(result['content']['featureId'])
-#		#for i in range(2000,2203):
-#		#	value.Face_Delete(i)
+	for i in range(2000,2360):
+		print value.Face_Delete(i)

@@ -33,14 +33,7 @@ def EncodeData(Data):
 	Buffer=Array()
 	Classify_By_Sex={'1':'男','2':'女'}
 	ID_Info={}
-	#print "name",Data[17:47].decode("utf-16").strip()#姓名
-	#print "Sex",Classify_By_Sex[Data[45:47].decode("utf-16").strip()] #性别
-	#print "Bird",Data[51:57].decode("utf-16").strip() #生日
-	#print "Address",Data[57:137].decode("utf-16").strip() #地址
-	#print "ID",Data[137:173].decode("utf-16").strip() #ID
-	#print "Organ",Data[173:203].decode("utf-16").strip() #签发机关
-	#print "Date",Data[203:256].decode("utf-16").strip() #有效日期
-	print "name",Data[14:44].decode("utf-16").strip()#姓名
+	print "name",Data[14:44].decode("utf-16")#.strip()#姓名
 	print "Sex",Classify_By_Sex[Data[42:46].decode("utf-16").strip()] #性别
 	print "Bird",Data[50:66].decode("utf-16").strip() #生日
 	print "Address",Data[66:136].decode("utf-16").strip() #地址
@@ -49,7 +42,7 @@ def EncodeData(Data):
 	print "Date",Data[202:256].decode("utf-16").strip() #有效日期
 	if libc.unpack(Data[270:270+1024],Buffer,311)!=1:
 		print "Decode Imaga Failed"
-		return False
+		return None
 	else:
 		time.sleep(0.1)
 		if os.path.exists("./zp.bmp"):
@@ -57,6 +50,7 @@ def EncodeData(Data):
 			return ID_Info
 		else:
 			print "ImageEncode Error"
+			return None
 	
 
 if __name__=="__main__":
