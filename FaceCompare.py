@@ -120,5 +120,5 @@ if __name__=="__main__":
 #		elif result["status"] ==0:
 #			print value.Face_Compare("Image1")
 #			print value.Face_Delete(result['content']['featureId'])
-	for i in range(2000,2360):
+	for i in range(2200,2375):
 		print value.Face_Delete(i)

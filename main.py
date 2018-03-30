@@ -45,7 +45,7 @@ def EncodeData(libc,Data):
 		print "Decode Imaga Failed"
 		return None
 	else:
-		time.sleep(0.1)
+		time.sleep(0.2)
 		if os.path.exists("./zp.bmp"):
 			print "Success"
 			return ID_Info
